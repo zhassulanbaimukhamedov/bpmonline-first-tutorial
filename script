@@ -1,0 +1,30 @@
+getActions: function() {
+						var actionMenuItems = this.callParent(arguments);
+						actionMenuItems.addItem(this.getButtonMenuItem({
+							"Caption": "getCompanyName",
+							"Tag": "getCompanyName"
+						}));
+						
+						return actionMenuItems;
+					},
+					getCompanyName: function() {
+						//this.showInformationDialog("Название Юр Лица : "+this.get("Name"));
+						var parameters = {
+							inputParam: this.get("TsBIN")
+						};
+						ServiceHelper.callService(
+							"CustomConfigurationServiceTest",
+							"GetTransformValue",
+							function(response) {
+								if (response) {
+									var result = response.GetTransformValueResult;
+									if (result) {
+										this.showInformationDialog(result);
+										return;
+									} else {
+										var resultObject = {success: true};
+										callback.call(scope, resultObject);
+									}
+								}
+							}, parameters, this);
+					},
